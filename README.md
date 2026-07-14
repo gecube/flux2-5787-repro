@@ -11,8 +11,8 @@ Confirmed with:
 | component | version | result |
 |---|---|---|
 | kustomize CLI | v5.8.1 | tag preserved (baseline) |
-| flux CLI (`flux build ... --dry-run`) | v2.8.8 | **tag lost** |
-| kustomize-controller (live cluster) | v1.8.5 | **tag lost** |
+| flux CLI (`flux build ... --dry-run`) | v2.8.8, v2.9.2 | **tag lost** |
+| kustomize-controller (live cluster) | v1.8.5 (Flux v2.8.8), v1.9.3 (Flux v2.9.2) | **tag lost** |
 | `fluxcd/pkg/kustomize` (unit test) | v1.38.0 | **tag lost** |
 
 ## Layout
