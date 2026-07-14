@@ -1,0 +1,36 @@
+# In-cluster reproduction. Push this repository as an OCI artifact to a
+# registry reachable from the cluster, adjust spec.url below, then apply:
+#
+#   flux push artifact oci://<registry>/repro:v1 --path=. --source=flux2-5787-repro --revision=v1
+#   kubectl apply -f cluster/repro-cluster.yaml
+#   kubectl get deploy myapp -n default \
+#     -o jsonpath='{.spec.template.spec.containers[0].image}'
+#
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: repro
+  namespace: default
+spec:
+  interval: 1m
+  url: oci://REGISTRY_HOST:5000/repro
+  insecure: true
+  ref:
+    tag: v1
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: myapp
+  namespace: default
+spec:
+  interval: 10m
+  prune: true
+  targetNamespace: default
+  sourceRef:
+    kind: OCIRepository
+    name: repro
+  path: ./base
+  images:
+    - name: ghcr.io/example/myapp
+      newName: registry.example.com/myapp
